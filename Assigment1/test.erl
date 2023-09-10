@@ -1,14 +1,21 @@
 -module(test).
 
--export([bench/2]).
+-export([bench/3]).
 
-bench(Host, Port) ->
-    Start = erlang:system_time(micro_seconds),
-    io:fwrite("Start!~n", []),
-    run(100, Host, Port),
-    io:fwrite("Complete!~n", []),
-    Finish = erlang:system_time(micro_seconds),
-    Finish - Start.
+bench(N, Host, Port) ->
+    if
+        N > 1000 ->
+            ok; 
+        true ->
+            Start = erlang:system_time(micro_seconds),
+            %io:fwrite("Start!~n", []),
+            run(N, Host, Port),
+            %io:fwrite("Complete!~n", []),
+            Finish = erlang:system_time(micro_seconds),
+            TotalTime = Finish - Start,
+            io:fwrite("Time(N=~p) : ~p ~n", [N, TotalTime]),
+            bench(N+100, Host, Port)
+    end.
 
 run(N, Host, Port) ->
     if
