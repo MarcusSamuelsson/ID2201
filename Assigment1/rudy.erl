@@ -1,8 +1,12 @@
 -module(rudy).
 
--export([init/1]).
+-export([start/1, stop/0]).
 
-
+start(Port) ->
+    register(rudy, spawn(fun() -> init(Port) end)).
+    
+stop() ->
+    exit(whereis(rudy), "time to die").
 
 init(Port) ->
     Opt = [list, {active, false}, {reuseaddr, true}],
