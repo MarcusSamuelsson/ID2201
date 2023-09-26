@@ -6,7 +6,7 @@ new() ->
     [].
 
 add(Name,Ref,Pid,Intf) ->
-    io:format("Add: ~p ~n",[Name]),
+    %io:format("Add: ~p ~n",[Name]),
     [{Name,Ref,Pid}|Intf].
 
 remove(Name, Intf) ->

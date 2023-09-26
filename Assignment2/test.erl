@@ -1,6 +1,6 @@
 -module(test).
 
--export([start/3, stop/1, connectCounry/6]).
+-compile(export_all).
 
 start(Network, Regs, Cities) ->
     io:format("Starting tests~n"),

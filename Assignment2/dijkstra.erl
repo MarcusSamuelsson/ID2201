@@ -53,7 +53,7 @@ table(Gateways,Map) ->
     iterate(FinalList,Map,[]).
 
 route(Node, Table) ->
-    io:format("Here ~p ~n",[Table]),
+    %io:format("Here ~p ~n",[Table]),
     case lists:keyfind(Node, 1, Table) of
 		{_, Gateway} ->
 			io:format("Found ~p ~n",[Gateway]),
