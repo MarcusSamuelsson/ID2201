@@ -12,7 +12,7 @@ init(Name, Log, Seed, Sleep, Jitter) ->
     random:seed(Seed, Seed, Seed),
     receive
         {peers, Peers} ->
-            loop(Name, Log, Peers, Sleep, Jitter);
+            loop(Name, Log, Peers, Sleep, Jitter, time:zero());
         stop ->
             ok
     end.
@@ -20,25 +20,26 @@ init(Name, Log, Seed, Sleep, Jitter) ->
 peers(Wrk, Peers) ->
     Wrk ! {peers, Peers}.
 
-loop(Name, Log, Peers, Sleep, Jitter)->
+loop(Name, Log, Peers, Sleep, Jitter, T)->
     Wait = random:uniform(Sleep),
     
     receive
         {msg, Time, Msg} ->
-            Log ! {log, Name, Time, {received, Msg}},
-            loop(Name, Log, Peers, Sleep, Jitter);
+            NewT = time:inc(Name, time:merge(T, Time)),
+            Log ! {log, Name, NewT, {received, Msg}},
+            loop(Name, Log, Peers, Sleep, Jitter, NewT);
         stop ->
             ok;
         Error ->
             Log ! {log, Name, time, {error, Error}}
         after Wait ->
             Selected = select(Peers),
-            Time = calendar:local_time(),
+            Time = time:inc(Name,T),
             Message = {hello, random:uniform(100)},
             Selected ! {msg, Time, Message},
             jitter(Jitter),
             Log ! {log, Name, Time, {sending, Message}},
-            loop(Name, Log, Peers, Sleep, Jitter)
+            loop(Name, Log, Peers, Sleep, Jitter, Time)
     end.
 
 select(Peers) ->

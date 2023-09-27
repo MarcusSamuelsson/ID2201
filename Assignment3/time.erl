@@ -9,10 +9,10 @@ inc(_Name, T) ->
     (T+1).
 
 merge(Ti, Tj) ->
-    if
-        Ti < Tj ->
-            Tj;
+    case Ti < Tj of
         true ->
+            Tj;
+        false ->
             Ti
     end.
 
@@ -23,8 +23,7 @@ clock(Nodes) ->
     lists:foldl(fun(X, Acc) -> [{X, zero()}|Acc] end, [], Nodes).
 
 update(Node, Time, Clock) ->
-    lists:keydelete(Node, 1, Clock),
-    lists:keysort(2, [{Node, Time}|Clock]).
+    lists:keysort(2, [{Node, Time}|lists:keydelete(Node, 1, Clock)]).
 
 safe(Time, Clock) ->
     lists:all(fun({_, T}) -> leq(Time, T) end, Clock).
