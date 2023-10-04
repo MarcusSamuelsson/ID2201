@@ -1,5 +1,4 @@
 -module(gms2).
--define(arghh, 10000000000000000000000000).
 -define(timeout, 100).
 
 -compile(export_all).

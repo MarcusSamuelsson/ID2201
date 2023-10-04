@@ -1,5 +1,5 @@
 -module(gms1).
--define(arghh, 10000000000000000000000000).
+-define(arghh, 200).
 
 -compile(export_all).
 
